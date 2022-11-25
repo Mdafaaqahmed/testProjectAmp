@@ -9,6 +9,10 @@ import { UserList } from "./user/UserList";
 import { UserCreate } from "./user/UserCreate";
 import { UserEdit } from "./user/UserEdit";
 import { UserShow } from "./user/UserShow";
+import { AdmindList } from "./admind/AdmindList";
+import { AdmindCreate } from "./admind/AdmindCreate";
+import { AdmindEdit } from "./admind/AdmindEdit";
+import { AdmindShow } from "./admind/AdmindShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -28,7 +32,7 @@ const App = (): React.ReactElement => {
   return (
     <div className="App">
       <Admin
-        title={"My service"}
+        title={"user_db"}
         dataProvider={dataProvider}
         authProvider={jwtAuthProvider}
         theme={theme}
@@ -41,6 +45,13 @@ const App = (): React.ReactElement => {
           edit={UserEdit}
           create={UserCreate}
           show={UserShow}
+        />
+        <Resource
+          name="Admind"
+          list={AdmindList}
+          edit={AdmindEdit}
+          create={AdmindCreate}
+          show={AdmindShow}
         />
       </Admin>
     </div>

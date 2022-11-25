@@ -11,11 +11,25 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, IsJSON } from "class-validator";
+import { AdmindWhereUniqueInput } from "../../admind/base/AdmindWhereUniqueInput";
+import { ValidateNested, IsOptional, IsString, IsJSON } from "class-validator";
+import { Type } from "class-transformer";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 @InputType()
 class UserUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: () => AdmindWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => AdmindWhereUniqueInput)
+  @IsOptional()
+  @Field(() => AdmindWhereUniqueInput, {
+    nullable: true,
+  })
+  admin?: AdmindWhereUniqueInput | null;
+
   @ApiProperty({
     required: false,
     type: String,

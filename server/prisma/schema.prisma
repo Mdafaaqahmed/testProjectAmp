@@ -8,6 +8,8 @@ generator client {
 }
 
 model User {
+  admin     Admind?  @relation(fields: [adminId], references: [id])
+  adminId   String?
   createdAt DateTime @default(now())
   firstName String?
   id        String   @id @default(cuid())
@@ -16,4 +18,11 @@ model User {
   roles     Json
   updatedAt DateTime @updatedAt
   username  String   @unique
+}
+
+model Admind {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+  users     User[]
 }

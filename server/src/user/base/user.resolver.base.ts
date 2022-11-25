@@ -25,6 +25,7 @@ import { DeleteUserArgs } from "./DeleteUserArgs";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
 import { User } from "./User";
+import { Admind } from "../../admind/base/Admind";
 import { UserService } from "../user.service";
 
 @graphql.Resolver(() => User)
@@ -90,7 +91,15 @@ export class UserResolverBase {
   async createUser(@graphql.Args() args: CreateUserArgs): Promise<User> {
     return await this.service.create({
       ...args,
-      data: args.data,
+      data: {
+        ...args.data,
+
+        admin: args.data.admin
+          ? {
+              connect: args.data.admin,
+            }
+          : undefined,
+      },
     });
   }
 
@@ -105,7 +114,15 @@ export class UserResolverBase {
     try {
       return await this.service.update({
         ...args,
-        data: args.data,
+        data: {
+          ...args.data,
+
+          admin: args.data.admin
+            ? {
+                connect: args.data.admin,
+              }
+            : undefined,
+        },
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -134,5 +151,21 @@ export class UserResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Admind, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "Admind",
+    action: "read",
+    possession: "any",
+  })
+  async admin(@graphql.Parent() parent: User): Promise<Admind | null> {
+    const result = await this.service.getAdmin(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

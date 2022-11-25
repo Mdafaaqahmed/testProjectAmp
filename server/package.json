@@ -1,5 +1,5 @@
 {
-  "name": "@my-service/server",
+  "name": "@user-db/server",
   "private": true,
   "scripts": {
     "start": "nest start",
